@@ -30,4 +30,4 @@ given rowDecoderGen[A] (using inst: K0.ProductInstances[RowDecoder, A]): RowDeco
     }
     aOpt.fold(DecodeResult.failure(errOpt.getOrElse(DecodeError.OutOfBounds(i))))(DecodeResult.apply)
 
-inline def derived[A](using K0.ProductInstances[RowDecoder, A]): RowDecoder[A] = rowDecoderGen
+inline given derived[A](using K0.ProductInstances[RowDecoder, A]): RowDecoder[A] = rowDecoderGen

@@ -17,7 +17,7 @@ class ShapelessGenericRowDecoderSuite extends FunSuite {
 
   test("derivation works for case classes with up to 27 fields") {
     // (28 fields would hit the maxinline barrier of 32)
-    val decoder: RowDecoder[MaxFieldsCaseClass] = derived
+    val decoder: RowDecoder[MaxFieldsCaseClass] = implicitly
     val decodeResult = decoder.decode((1 to 27).map(_.toString))
     val expected = Right(MaxFieldsCaseClass(
       1, 2, 3, 4, 5, 6, 7, 8, 9,
@@ -28,7 +28,7 @@ class ShapelessGenericRowDecoderSuite extends FunSuite {
   }
 
   test("out of bounds is returned with correct index") {
-    val decoder: RowDecoder[MaxFieldsCaseClass] = derived
+    val decoder: RowDecoder[MaxFieldsCaseClass] = implicitly
     val oob = 3
     val decodeResult = decoder.decode((0 until oob).map(_.toString))
     val expected = DecodeResult.outOfBounds(oob)
@@ -42,7 +42,7 @@ class ShapelessGenericRowDecoderSuite extends FunSuite {
     given CellDecoder[Foo] = CellDecoder.from(_ => fooError)
 
     case class Bar(a: Int, b: Foo, c: String)
-    val decoder: RowDecoder[Bar] = derived
+    val decoder: RowDecoder[Bar] = implicitly
 
     val decodeResult = decoder.decode(Seq("1", "foo", "some string"))
     assertEquals(decodeResult, fooError)
